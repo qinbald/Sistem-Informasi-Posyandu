@@ -113,6 +113,7 @@ class UserController extends Controller
             'name' => 'sometimes|string|max:255',
             'email' => 'sometimes|email|unique:users,email,'.$user->id,
             'password' => 'nullable|min:8|confirmed',
+            'current_password' => 'nullable|string',
             // Hanya ADMIN yang boleh mengubah role, status aktif, profil parent, dan penugasan posyandu.
             'role' => ($isAdmin ? 'sometimes|in:'.implode(',', Role::values()) : 'prohibited'),
             'phone' => 'nullable|string|max:20',
@@ -121,6 +122,25 @@ class UserController extends Controller
             'posyandu_ids' => ($isAdmin ? 'nullable|array' : 'prohibited'),
             'posyandu_ids.*' => ($isAdmin ? 'exists:posyandu,id' : 'prohibited'),
         ]);
+
+        if ($request->filled('password')) {
+            if ($request->filled('current_password')) {
+                if (! Hash::check((string) $request->input('current_password'), $user->password)) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Password saat ini tidak sesuai.',
+                        'errors' => ['current_password' => ['Password saat ini tidak sesuai.']],
+                    ], 422);
+                }
+            } elseif (! $isAdmin) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Password saat ini wajib diisi.',
+                    'errors' => ['current_password' => ['Password saat ini wajib diisi.']],
+                ], 422);
+            }
+        }
+        unset($data['current_password']);
 
         if (array_key_exists('password', $data)) {
             if (empty($data['password'])) {
