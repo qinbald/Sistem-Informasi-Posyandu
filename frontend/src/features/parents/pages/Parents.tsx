@@ -255,7 +255,7 @@ export default function Parents() {
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/40" onClick={()=>setShowForm(false)} />
-          <div className="relative bg-white rounded-2xl w-full max-w-lg p-6 max-h-[90vh] overflow-auto">
+          <div className="mobile-dialog-panel relative bg-white rounded-2xl w-full max-w-lg p-6">
             <h3 className="font-semibold">{editId?'Edit':'Tambah'} Orang Tua</h3>
             <form onSubmit={submit} className="space-y-3 mt-4">
               <Field label="Nama Lengkap" required error={errors.nama_lengkap}>

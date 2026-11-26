@@ -120,14 +120,14 @@ export default function Layout() {
       : []
 
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-slate-50 overscroll-none">
+    <div className="app-shell flex w-full overflow-hidden bg-slate-50 overscroll-none">
       {mobileOpen && (
         <div className="fixed inset-0 bg-black/30 z-40 lg:hidden" onClick={() => setMobileOpen(false)} />
       )}
 
       {/* 1. NAVBAR KIRI (Sidebar) */}
       <aside
-        className={`fixed lg:relative inset-y-0 left-0 w-64 h-full shrink-0 flex flex-col border-r border-slate-200 bg-white z-50 lg:z-20 transition-transform duration-200 lg:translate-x-0 ${
+        className={`fixed lg:relative inset-y-0 left-0 w-64 h-full min-h-0 shrink-0 flex flex-col border-r border-slate-200 bg-white z-50 lg:z-20 transition-transform duration-200 lg:translate-x-0 ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -188,7 +188,7 @@ export default function Layout() {
           </div>
         </div>
 
-        <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-6">
+        <nav className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 py-4 space-y-6">
           {NAV_SECTIONS.map((s) => (
             <Section
               key={s.title}
@@ -212,7 +212,7 @@ export default function Layout() {
       </aside>
 
       {/* 2. AREA KONTEN KANAN */}
-      <div className="flex-1 h-full flex flex-col min-w-0 overflow-hidden">
+      <div className="min-h-0 flex-1 flex flex-col min-w-0 overflow-hidden">
         <header className="lg:hidden shrink-0 z-30 bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between">
           <button
             onClick={() => setMobileOpen(true)}
@@ -237,7 +237,7 @@ export default function Layout() {
         </header>
 
         {/* MAIN CONTENT (Hanya area ini yang dapat digulir secara vertikal) */}
-        <main className="flex-1 h-full overflow-y-auto overscroll-y-none relative p-6 md:p-8">
+        <main className="app-main-scroll relative min-h-0 flex-1 p-4 sm:p-6 md:p-8">
           <Outlet />
         </main>
       </div>

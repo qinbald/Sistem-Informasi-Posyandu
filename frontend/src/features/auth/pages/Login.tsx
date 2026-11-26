@@ -53,7 +53,7 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen min-h-[100dvh] overflow-y-auto flex">
       <div className="flex-1 flex items-center justify-center p-6 bg-white">
         <div className="w-full max-w-[420px]">
           <div className="flex items-center gap-3 mb-8">

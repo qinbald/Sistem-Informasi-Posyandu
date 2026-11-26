@@ -86,7 +86,7 @@ export function UserProfileModal({ isOpen, onClose, user }: UserProfileModalProp
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-fade-in">
       <div
-        className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden"
+        className="mobile-dialog-panel w-full max-w-md bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header Modal */}

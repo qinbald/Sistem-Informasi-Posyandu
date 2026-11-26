@@ -3,9 +3,9 @@ import { ReactNode } from 'react'
 export function Modal({ open, onClose, title, children }: { open: boolean; onClose: () => void; title: string; children: ReactNode }) {
   if (!open) return null
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative bg-white rounded-2xl shadow-xl w-[95%] max-w-lg max-h-[90vh] overflow-auto">
+      <div className="mobile-dialog-panel relative bg-white rounded-2xl shadow-xl w-[95%] max-w-lg">
         <div className="sticky top-0 bg-white border-b px-6 py-4 flex justify-between items-center">
           <h3 className="font-semibold text-slate-800">{title}</h3>
           <button onClick={onClose} className="w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-500">✕</button>
@@ -21,7 +21,7 @@ export function ConfirmDeleteModal({ open, onClose, onConfirm, loading, title = 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/40" onClick={onClose} />
-      <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
+      <div className="mobile-dialog-panel relative bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
         <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4 text-red-600 text-xl">⚠</div>
         <h3 className="text-center font-semibold text-lg text-slate-800">{title}</h3>
         <p className="text-center text-sm text-slate-500 mt-2">{description}</p>
