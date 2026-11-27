@@ -311,7 +311,7 @@ export default function UsersPage() {
 
       {open && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 p-4">
-          <div className="w-full max-w-lg bg-white rounded-2xl shadow-xl max-h-[90vh] overflow-y-auto">
+          <div className="mobile-dialog-panel w-full max-w-lg bg-white rounded-2xl shadow-xl">
             <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 sticky top-0 bg-white">
               <h3 className="font-bold text-slate-800">Tambah Pengguna</h3>
               <button onClick={() => setOpen(false)} className="text-slate-400 hover:text-slate-700">
@@ -470,7 +470,7 @@ export default function UsersPage() {
 
       {resetTarget && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 p-4">
-          <div className="w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden">
+          <div className="mobile-dialog-panel w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden">
             <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-white">
               <h3 className="font-bold text-slate-800">Reset Password: {resetTarget.name}</h3>
               <button

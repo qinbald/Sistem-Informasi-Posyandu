@@ -202,7 +202,7 @@ export default function PosyanduPage() {
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/40" onClick={() => setShowForm(false)} />
-          <div className="relative bg-white rounded-2xl w-full max-w-2xl p-6 max-h-[90vh] overflow-y-auto">
+          <div className="mobile-dialog-panel relative bg-white rounded-2xl w-full max-w-2xl p-6">
             <h3 className="font-bold text-lg text-slate-800">{editId ? 'Edit' : 'Tambah'} Posyandu</h3>
             <form onSubmit={submit} className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
               {formError && (
