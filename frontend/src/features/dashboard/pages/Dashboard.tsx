@@ -20,6 +20,7 @@ import { useAuth } from '@/features/auth/AuthContext'
 import { ROUTES } from '@/app/routes'
 import { can } from '@/shared/lib/rbac'
 import { ROLE_LABEL, type Posyandu } from '@/shared/types'
+import { PendingFollowUpModal } from '../components/PendingFollowUpModal'
 
 type Dash = {
   anak_terdaftar: number
@@ -44,20 +45,38 @@ function StatCard({
   value,
   sub,
   tone,
+  onClick,
+  actionHint,
 }: {
   label: string
   value: number | undefined
   sub: string
   tone: string
+  onClick?: () => void
+  actionHint?: string
 }) {
-  return (
-    <Card>
+  const card = (
+    <Card
+      className={
+        onClick
+          ? 'h-full transition-all duration-150 hover:border-amber-300 hover:shadow-md active:scale-[0.99] cursor-pointer'
+          : 'h-full'
+      }
+    >
       <CardContent>
         <div className="flex justify-between items-start gap-3">
           <div className="min-w-0">
             <p className="text-xs font-semibold tracking-widest text-slate-400 uppercase">{label}</p>
             <p className="text-3xl font-bold text-slate-900 mt-2">{value ?? '-'}</p>
             <p className="text-xs text-slate-500 mt-1">{sub}</p>
+            {actionHint && (
+              <p className="text-xs font-semibold text-amber-700 group-hover:text-amber-800 mt-2 inline-flex items-center gap-1">
+                {actionHint}
+                <span className="transition-transform group-hover:translate-x-0.5" aria-hidden="true">
+                  →
+                </span>
+              </p>
+            )}
           </div>
           <div className={`w-10 h-10 shrink-0 rounded-xl ${tone} flex items-center justify-center text-white`}>
             ◧
@@ -66,6 +85,20 @@ function StatCard({
       </CardContent>
     </Card>
   )
+
+  if (onClick) {
+    return (
+      <button
+        type="button"
+        onClick={onClick}
+        className="w-full text-left block group focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 rounded-2xl"
+      >
+        {card}
+      </button>
+    )
+  }
+
+  return card
 }
 
 export default function Dashboard() {
@@ -83,6 +116,7 @@ export default function Dashboard() {
   const [posyandus, setPosyandus] = useState<Posyandu[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [showPendingModal, setShowPendingModal] = useState(false)
 
   const fetchDashboardData = async (pid?: string) => {
     setLoading(true)
@@ -155,6 +189,8 @@ export default function Dashboard() {
           value: data.perlu_pemantauan,
           sub: 'Menunggu tindak lanjut',
           tone: 'bg-amber-500',
+          onClick: () => setShowPendingModal(true),
+          actionHint: 'Lihat daftar',
         },
       ]
     : [
@@ -175,6 +211,8 @@ export default function Dashboard() {
           value: data.perlu_pemantauan,
           sub: 'Menunggu tindak lanjut',
           tone: 'bg-amber-500',
+          onClick: () => setShowPendingModal(true),
+          actionHint: 'Lihat daftar',
         },
         {
           label: 'Jumlah Posyandu',
@@ -229,7 +267,15 @@ export default function Dashboard() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
         {stats.map((s) => (
-          <StatCard key={s.label} label={s.label} value={s.value} sub={s.sub} tone={s.tone} />
+          <StatCard
+            key={s.label}
+            label={s.label}
+            value={s.value}
+            sub={s.sub}
+            tone={s.tone}
+            onClick={'onClick' in s ? s.onClick : undefined}
+            actionHint={'actionHint' in s ? s.actionHint : undefined}
+          />
         ))}
       </div>
 
@@ -341,6 +387,21 @@ export default function Dashboard() {
           </Card>
         </div>
       )}
+      <PendingFollowUpModal
+        isOpen={showPendingModal}
+        onClose={() => setShowPendingModal(false)}
+        posyanduId={isOrangTua ? undefined : (isKader ? (kaderPosyanduId || undefined) : (posyanduId || undefined))}
+        scopeLabel={
+          isOrangTua
+            ? 'Anak Saya'
+            : isKader
+              ? (kaderPosyanduNama || 'Posyandu Anda')
+              : posyanduId
+                ? (posyandus.find((p) => String(p.id) === posyanduId)?.nama_posyandu || 'Posyandu Terpilih')
+                : 'Semua Posyandu'
+        }
+        role={role}
+      />
     </div>
   )
 }

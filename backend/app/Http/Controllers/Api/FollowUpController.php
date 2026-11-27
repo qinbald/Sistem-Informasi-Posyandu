@@ -7,6 +7,7 @@ use App\Http\Requests\StoreFollowUpRequest;
 use App\Models\Child;
 use App\Models\FollowUp;
 use App\Services\AuditLogService;
+use App\Support\Mask;
 use Illuminate\Http\Request;
 
 class FollowUpController extends Controller
@@ -32,6 +33,16 @@ class FollowUpController extends Controller
         $q->latest();
         $perPage = min((int) $request->query('per_page', 10), 100);
         $data = $q->paginate($perPage);
+
+        // Masking PII anak pada endpoint list untuk role non-admin (mis. KADER)
+        if (! $user->isAdmin() && ! $user->isOrangTua()) {
+            $data->getCollection()->each(function (FollowUp $followUp): void {
+                if ($followUp->relationLoaded('child') && $followUp->child) {
+                    $followUp->child->nik = Mask::nik($followUp->child->nik);
+                    $followUp->child->nomor_kk = Mask::kk($followUp->child->nomor_kk);
+                }
+            });
+        }
 
         return response()->json(['success' => true, 'data' => $data, 'meta' => ['current_page' => $data->currentPage(), 'last_page' => $data->lastPage(), 'total' => $data->total(), 'per_page' => $data->perPage()]]);
     }
